@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#050a18"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <title>Galaxy Math — Lingkaran</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="cursor-star">
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#00d4ff" stroke="#00d4ff" stroke-width="1"/>
+  </svg>
+</div>
+<canvas id="starfield"></canvas>
+<div id="confetti-container"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-logo">🌀 Galaxy Math</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home"        class="nav-link active" data-section="home">Home</a></li>
+    <li><a href="#materi"      class="nav-link" data-section="materi">Materi</a></li>
+    <li><a href="#kalkulator"  class="nav-link" data-section="kalkulator">Kalkulator</a></li>
+    <li><a href="#visualisasi" class="nav-link" data-section="visualisasi">Visualisasi</a></li>
+    <li><a href="#soal"        class="nav-link" data-section="soal">Soal</a></li>
+    <li><a href="#game"        class="nav-link" data-section="game">🎮 Game</a></li>
+    <li><a href="#leaderboard" class="nav-link" data-section="leaderboard">🏆 Board</a></li>
+    <li><button class="nav-kunci-btn" onclick="openKunciModal()">🔑 Kunci Jawaban</button></li>
+  </ul>
+  <!-- STUDENT INFO NAVBAR — KEREN -->
+  <div class="nav-student-chip" id="navStudentChip">
+    <div class="nav-student-avatar">👩‍🎓</div>
+    <div class="nav-student-info">
+      <div class="nav-student-name">RR. Ammara Nadya Shafwa</div>
+      <div class="nav-student-class">XI SIJA 1 &nbsp;·&nbsp; Presensi 30</div>
+    </div>
+  </div>
+  <div class="hamburger" id="hamburger">☰</div>
+</nav>
+
+<!-- XP BAR -->
+<div class="xp-bar-wrap">
+  <div class="xp-bar-inner" id="xpBar"></div>
+  <span class="xp-label" id="xpLabel">XP: 0</span>
+</div>
+
+<!-- ===== HERO ===== -->
+<section id="home" class="section hero-section">
+  <div class="hero-content">
+    <div class="hero-badge">✦ Media Pembelajaran Interaktif ✦</div>
+    <h1 class="hero-title">LINGKARAN</h1>
+    <p class="hero-subtitle">Jelajahi dunia lingkaran dari persamaan hingga garis singgung dengan cara yang seru, visual, dan penuh tantangan!</p>
+    <div class="hero-buttons">
+      <button class="btn-primary" onclick="scrollToSection('materi')">Mulai Belajar 🚀</button>
+      <button class="btn-secondary" onclick="scrollToSection('game')">Main Game 🎮</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num" id="stat-xp">0</span><span class="stat-label">Total XP</span></div>
+      <div class="stat"><span class="stat-num">5</span><span class="stat-label">Topik</span></div>
+      <div class="stat"><span class="stat-num">20+</span><span class="stat-label">Soal</span></div>
+      <div class="stat"><span class="stat-num">5</span><span class="stat-label">Game</span></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <canvas id="heroCircle" width="420" height="420"></canvas>
+  </div>
+</section>
+
+<!-- ===== FUN FACTS TICKER ===== -->
+<div class="facts-ticker">
+  <span class="facts-label">💡 Fun Fact:</span>
+  <div class="facts-track" id="factsTicker"></div>
+</div>
+
+<!-- ===== MATERI ===== -->
+<section id="materi" class="section">
+  <div class="section-header">
+    <h2 class="section-title">📚 Materi Lingkaran</h2>
+    <p class="section-desc">Pilih topik — setiap topik yang dibuka memberi +10 XP!</p>
+  </div>
+  <div class="topic-tabs">
+    <button class="tab-btn active"  onclick="showTopic('t1',this)">⭕ Persamaan</button>
+    <button class="tab-btn"         onclick="showTopic('t2',this)">📋 Bentuk Umum</button>
+    <button class="tab-btn"         onclick="showTopic('t3',this)">📍 Posisi Titik & Garis</button>
+    <button class="tab-btn"         onclick="showTopic('t4',this)">📐 Garis Singgung</button>
+    <button class="tab-btn"         onclick="showTopic('t5',this)">🔗 Hubungan 2 Lingkaran</button>
+  </div>
+
+  <div id="t1" class="topic-content active">
+    <div class="topic-grid">
+      <div class="topic-card glow-blue">
+        <div class="card-icon">⭕</div>
+        <h3>Lingkaran Pusat O(0,0)</h3>
+        <div class="formula-box">x² + y² = r²</div>
+        <p>Lingkaran dengan pusat di titik asal O(0,0) dan jari-jari r.</p>
+        <div class="example-box"><strong>Contoh:</strong> r = 5 → x² + y² = 25</div>
+      </div>
+      <div class="topic-card glow-purple">
+        <div class="card-icon">🎯</div>
+        <h3>Lingkaran Pusat P(a,b)</h3>
+        <div class="formula-box">(x−a)² + (y−b)² = r²</div>
+        <p>Lingkaran dengan pusat P(a,b) dan jari-jari r.</p>
+        <div class="example-box"><strong>Contoh:</strong> P(3,2), r=4 → (x−3)²+(y−2)²=16</div>
+      </div>
+      <div class="topic-card full-width glow-gold">
+        <div class="card-icon">📐</div>
+        <h3>Cara Menentukan Persamaan Lingkaran</h3>
+        <div class="steps-list">
+          <div class="step"><span class="step-num">1</span><span>Diketahui pusat &amp; r → langsung substitusi ke rumus</span></div>
+          <div class="step"><span class="step-num">2</span><span>Diketahui pusat &amp; titik → r = √((x₂−x₁)²+(y₂−y₁)²)</span></div>
+          <div class="step"><span class="step-num">3</span><span>Menyinggung sumbu X → r = |b|</span></div>
+          <div class="step"><span class="step-num">4</span><span>Menyinggung sumbu Y → r = |a|</span></div>
+        </div>
+      </div>
+      <!-- Kartu ringkasan rumus -->
+      <div class="topic-card glow-blue">
+        <div class="card-icon">🧮</div>
+        <h3>Contoh Soal Lengkap</h3>
+        <p style="color:var(--dim);font-size:.88rem;margin-bottom:.8rem">Lingkaran pusat P(3,2) melalui titik A(7,5):</p>
+        <div class="steps-list">
+          <div class="step"><span class="step-num">1</span><span>r = √((7−3)²+(5−2)²) = √(16+9) = √25 = <strong style="color:var(--accent)">5</strong></span></div>
+          <div class="step"><span class="step-num">2</span><span>Persamaan: (x−3)² + (y−2)² = 25</span></div>
+        </div>
+        <div class="formula-box" style="margin-top:.8rem">(x−3)² + (y−2)² = 25</div>
+      </div>
+      <div class="topic-card glow-purple">
+        <div class="card-icon">💡</div>
+        <h3>Tips Cepat</h3>
+        <div class="relation-list">
+          <div class="rel-item"><span class="rel-icon">📌</span><div><strong>Singgung sumbu X</strong><p>r = |koordinat y pusat|</p></div></div>
+          <div class="rel-item"><span class="rel-icon">📌</span><div><strong>Singgung sumbu Y</strong><p>r = |koordinat x pusat|</p></div></div>
+          <div class="rel-item"><span class="rel-icon">📌</span><div><strong>Melalui titik asal O(0,0)</strong><p>Persamaan: x² + y² = r²</p></div></div>
+          <div class="rel-item"><span class="rel-icon">📌</span><div><strong>Pusat di sumbu X (b=0)</strong><p>(x−a)² + y² = r²</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="t2" class="topic-content">
+    <div class="topic-grid">
+      <div class="topic-card full-width glow-blue">
+        <div class="card-icon">📋</div>
+        <h3>Bentuk Umum Persamaan Lingkaran</h3>
+        <div class="formula-box">x² + y² + Ax + By + C = 0</div>
+        <div class="formula-box secondary">Pusat P(−½A, −½B) &nbsp;|&nbsp; r = √((−½A)² + (−½B)² − C)</div>
+        <div class="example-box">
+          <strong>Contoh:</strong> x²+y²+4x−2y+1=0 → A=4, B=−2, C=1<br>
+          Pusat=(−2,1), r=√(4+1−1)=√4=<strong>2</strong>
+        </div>
+      </div>
+      <div class="topic-card glow-purple">
+        <div class="card-icon">🔄</div>
+        <h3>Melengkapkan Kuadrat Sempurna</h3>
+        <div class="steps-list">
+          <div class="step"><span class="step-num">1</span><span>Kelompokkan suku x dan y</span></div>
+          <div class="step"><span class="step-num">2</span><span>Tambahkan (A/2)² dan (B/2)² ke kedua ruas</span></div>
+          <div class="step"><span class="step-num">3</span><span>Faktorkan → (x−a)²+(y−b)²=r²</span></div>
+        </div>
+      </div>
+      <div class="topic-card glow-gold">
+        <div class="card-icon">💡</div>
+        <h3>Latihan</h3>
+        <div class="example-box">1. x²+y²+4x−2y+1=0<br>2. x²+y²−6x+8y−24=0</div>
+        <button class="btn-show-answer" onclick="toggleAnswer('ans-bu')">Lihat Jawaban</button>
+        <div id="ans-bu" class="answer-box hidden">
+          <strong>1.</strong> Pusat(−2,1), r=2<br>
+          <strong>2.</strong> A=−6,B=8,C=−24 → Pusat(3,−4), r=√(9+16+24)=7
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="t3" class="topic-content">
+    <div class="topic-grid">
+      <div class="topic-card glow-blue">
+        <div class="card-icon">📍</div>
+        <h3>Posisi Titik terhadap Lingkaran</h3>
+        <p>Substitusikan titik ke persamaan lingkaran:</p>
+        <div class="position-cards">
+          <div class="pos-card inside"><span class="pos-icon">🟢</span><strong>Di dalam</strong><span>x²+y² &lt; r²</span></div>
+          <div class="pos-card on"><span class="pos-icon">🔵</span><strong>Pada</strong><span>x²+y² = r²</span></div>
+          <div class="pos-card outside"><span class="pos-icon">🔴</span><strong>Di luar</strong><span>x²+y² &gt; r²</span></div>
+        </div>
+        <div class="example-box"><strong>Contoh:</strong> A(2,7), r=8 → 4+49=53 &lt; 64 → <strong>Di dalam</strong></div>
+      </div>
+      <div class="topic-card glow-purple">
+        <div class="card-icon">📏</div>
+        <h3>Posisi Garis terhadap Lingkaran</h3>
+        <p>Substitusi garis → kuadrat ax²+bx+c=0, hitung D=b²−4ac:</p>
+        <div class="position-cards">
+          <div class="pos-card inside"><span class="pos-icon">✂️</span><strong>Memotong</strong><span>D &gt; 0</span></div>
+          <div class="pos-card on"><span class="pos-icon">👆</span><strong>Menyinggung</strong><span>D = 0</span></div>
+          <div class="pos-card outside"><span class="pos-icon">🚫</span><strong>Tidak memotong</strong><span>D &lt; 0</span></div>
+        </div>
+        <div class="example-box"><strong>Contoh:</strong> y=3x+2 pada x²+y²+4x−y+1=0<br>→ 10x²+14x+3=0, D=76&gt;0 → <strong>Memotong</strong></div>
+      </div>
+      <div class="topic-card glow-gold">
+        <div class="card-icon">💡</div>
+        <h3>Posisi Titik — Pusat P(a,b)</h3>
+        <p>Jika lingkaran berpusat di P(a,b), substitusi ke:</p>
+        <div class="formula-box secondary">(x−a)² + (y−b)² ≶ r²</div>
+        <div class="steps-list">
+          <div class="step"><span class="step-num">1</span><span>Substitusi titik ke (x−a)²+(y−b)²</span></div>
+          <div class="step"><span class="step-num">2</span><span>Bandingkan hasilnya dengan r²</span></div>
+          <div class="step"><span class="step-num">3</span><span>&lt; r² → dalam &nbsp;|&nbsp; = r² → pada &nbsp;|&nbsp; &gt; r² → luar</span></div>
+        </div>
+        <div class="example-box"><strong>Contoh:</strong> B(5,3), pusat P(3,2), r=5<br>(5−3)²+(3−2)²=4+1=5 &lt; 25 → <strong>Di dalam</strong></div>
+      </div>
+      <div class="topic-card full-width glow-blue">
+        <div class="card-icon">🔍</div>
+        <h3>Posisi Titik — Bentuk Umum</h3>
+        <p style="margin-bottom:.8rem">Jika lingkaran bentuk umum: x²+y²+Ax+By+C=0, substitusi langsung:</p>
+        <div class="formula-box">f(x,y) = x² + y² + Ax + By + C</div>
+        <div class="position-cards" style="margin-top:.8rem">
+          <div class="pos-card inside"><span class="pos-icon">🟢</span><strong>Di dalam</strong><span>f(x,y) &lt; 0</span></div>
+          <div class="pos-card on"><span class="pos-icon">🔵</span><strong>Pada</strong><span>f(x,y) = 0</span></div>
+          <div class="pos-card outside"><span class="pos-icon">🔴</span><strong>Di luar</strong><span>f(x,y) &gt; 0</span></div>
+        </div>
+        <div class="example-box"><strong>Contoh:</strong> C(8,1) pada x²+y²+4x−8y−5=0<br>64+1+32−8−5 = 84 &gt; 0 → <strong>Di luar</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="t4" class="topic-content">
+    <div class="topic-grid">
+      <div class="topic-card full-width glow-blue">
+        <div class="card-icon">📐</div>
+        <h3>Garis Singgung Persekutuan</h3>
+        <div class="tangent-grid">
+          <div class="tangent-card">
+            <h4>🔵 GSPL (Persekutuan Luar)</h4>
+            <div class="formula-box">d = √(JP² − (R−r)²)</div>
+            <p>JP=jarak pusat, R=jari besar, r=jari kecil</p>
+          </div>
+          <div class="tangent-card">
+            <h4>🟠 GSPD (Persekutuan Dalam)</h4>
+            <div class="formula-box">d = √(JP² − (R+r)²)</div>
+            <p>JP=jarak pusat, R=jari besar, r=jari kecil</p>
+          </div>
+        </div>
+        <div class="example-box"><strong>Contoh:</strong> R=5,r=3,JP=10 → GSPL=√96=4√6, GSPD=√36=6</div>
+      </div>
+      <div class="topic-card glow-gold">
+        <div class="card-icon">🔢</div>
+        <h3>Garis Singgung dari Titik Luar</h3>
+        <div class="formula-box">d = √(JP² − r²)</div>
+        <p>d = panjang garis singgung dari titik luar ke titik singgung</p>
+        <div class="example-box"><strong>Contoh:</strong> Titik P(6,0), lingkaran x²+y²=16<br>JP=6, r=4 → d=√(36−16)=√20=2√5</div>
+      </div>
+      <div class="topic-card glow-purple">
+        <div class="card-icon">📌</div>
+        <h3>Syarat Garis Singgung Lingkaran</h3>
+        <p style="margin-bottom:.8rem">Garis y=mx+c menyinggung x²+y²=r² jika:</p>
+        <div class="formula-box">c² = r²(1 + m²)</div>
+        <div class="steps-list">
+          <div class="step"><span class="step-num">1</span><span>Substitusi y=mx+c ke x²+y²=r²</span></div>
+          <div class="step"><span class="step-num">2</span><span>Sederhanakan jadi kuadrat dalam x</span></div>
+          <div class="step"><span class="step-num">3</span><span>Syarat singgung: D = 0</span></div>
+        </div>
+        <div class="example-box"><strong>Contoh:</strong> y=2x+c menyinggung x²+y²=5<br>c²=5(1+4)=25 → c=±5<br>Garis singgung: y=2x+5 atau y=2x−5</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="t5" class="topic-content">
+    <div class="topic-grid">
+      <div class="topic-card glow-blue">
+        <div class="card-icon">🔗</div>
+        <h3>Hubungan Dua Lingkaran</h3>
+        <div class="relation-list">
+          <div class="rel-item"><span class="rel-icon">🔴</span><div><strong>Bersinggungan dalam</strong><p>JP = |R−r|, satu titik singgung, L kecil di dalam L besar</p></div></div>
+          <div class="rel-item"><span class="rel-icon">🟠</span><div><strong>Bersinggungan luar</strong><p>JP = R+r, satu titik singgung, keduanya di luar</p></div></div>
+          <div class="rel-item"><span class="rel-icon">🟡</span><div><strong>Berpotongan</strong><p>|R−r| &lt; JP &lt; R+r, dua titik potong</p></div></div>
+          <div class="rel-item"><span class="rel-icon">🟢</span><div><strong>Kosentris</strong><p>JP = 0, pusat sama, jari-jari beda</p></div></div>
+          <div class="rel-item"><span class="rel-icon">🔵</span><div><strong>Saling lepas</strong><p>JP &gt; R+r, tidak ada perpotongan</p></div></div>
+        </div>
+      </div>
+      <div class="topic-card glow-purple">
+        <div class="card-icon">🧮</div>
+        <h3>Langkah Menentukan Hubungan</h3>
+        <div class="steps-list">
+          <div class="step"><span class="step-num">1</span><span>Tentukan pusat &amp; r masing-masing lingkaran</span></div>
+          <div class="step"><span class="step-num">2</span><span>Hitung JP = √((x₂−x₁)²+(y₂−y₁)²)</span></div>
+          <div class="step"><span class="step-num">3</span><span>Bandingkan JP dengan R+r dan |R−r|</span></div>
+        </div>
+        <div class="example-box"><strong>Contoh:</strong> L1: pusat(0,0) r=3, L2: pusat(7,0) r=2<br>JP=7=3+2=R+r → <strong>Bersinggungan luar</strong></div>
+      </div>
+      <div class="topic-card glow-gold">
+        <div class="card-icon">📊</div>
+        <h3>Tabel Hubungan Dua Lingkaran</h3>
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:.82rem;margin-top:.5rem">
+            <thead>
+              <tr style="background:rgba(0,212,255,0.1)">
+                <th style="padding:.5rem .7rem;color:var(--accent);text-align:left;border-bottom:1px solid var(--border)">Kondisi JP</th>
+                <th style="padding:.5rem .7rem;color:var(--accent);text-align:left;border-bottom:1px solid var(--border)">Hubungan</th>
+                <th style="padding:.5rem .7rem;color:var(--accent);text-align:center;border-bottom:1px solid var(--border)">Titik</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:.4rem .7rem;color:var(--dim)">JP = 0</td><td style="padding:.4rem .7rem">Kosentris</td><td style="padding:.4rem .7rem;text-align:center">♾️</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:.4rem .7rem;color:var(--dim)">JP &lt; |R−r|</td><td style="padding:.4rem .7rem">L kecil dalam L besar</td><td style="padding:.4rem .7rem;text-align:center">0</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:.4rem .7rem;color:var(--dim)">JP = |R−r|</td><td style="padding:.4rem .7rem">Singgung dalam</td><td style="padding:.4rem .7rem;text-align:center">1</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:.4rem .7rem;color:var(--dim)">|R−r| &lt; JP &lt; R+r</td><td style="padding:.4rem .7rem">Berpotongan</td><td style="padding:.4rem .7rem;text-align:center">2</td></tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:.4rem .7rem;color:var(--dim)">JP = R+r</td><td style="padding:.4rem .7rem">Singgung luar</td><td style="padding:.4rem .7rem;text-align:center">1</td></tr>
+              <tr><td style="padding:.4rem .7rem;color:var(--dim)">JP &gt; R+r</td><td style="padding:.4rem .7rem">Saling lepas</td><td style="padding:.4rem .7rem;text-align:center">0</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== KALKULATOR ===== -->
+<section id="kalkulator" class="section">
+  <div class="section-header">
+    <h2 class="section-title">🔢 Kalkulator Lingkaran</h2>
+    <p class="section-desc">Hitung otomatis — masukkan nilai, hasil langsung muncul!</p>
+  </div>
+  <div class="calc-grid">
+    <div class="calc-card">
+      <h3>⭕ Dari Pusat &amp; Jari-jari</h3>
+      <div class="calc-row"><label>Pusat a:</label><input type="number" id="ca" value="2" oninput="calcFromCenter()"/></div>
+      <div class="calc-row"><label>Pusat b:</label><input type="number" id="cb" value="3" oninput="calcFromCenter()"/></div>
+      <div class="calc-row"><label>Jari-jari r:</label><input type="number" id="cr" value="5" oninput="calcFromCenter()"/></div>
+      <div class="calc-result" id="calc-center-result"></div>
+    </div>
+    <div class="calc-card">
+      <h3>📍 Dari Pusat &amp; Titik</h3>
+      <div class="calc-row"><label>Pusat (a,b):</label>
+        <input type="number" id="cp-a" value="1" oninput="calcFromPoint()" style="width:60px"/>
+        <input type="number" id="cp-b" value="2" oninput="calcFromPoint()" style="width:60px"/>
+      </div>
+      <div class="calc-row"><label>Titik (x,y):</label>
+        <input type="number" id="cp-x" value="4" oninput="calcFromPoint()" style="width:60px"/>
+        <input type="number" id="cp-y" value="6" oninput="calcFromPoint()" style="width:60px"/>
+      </div>
+      <div class="calc-result" id="calc-point-result"></div>
+    </div>
+    <div class="calc-card">
+      <h3>📋 Dari Bentuk Umum</h3>
+      <div class="calc-row"><label>A:</label><input type="number" id="cu-a" value="4" oninput="calcFromGeneral()"/></div>
+      <div class="calc-row"><label>B:</label><input type="number" id="cu-b" value="-6" oninput="calcFromGeneral()"/></div>
+      <div class="calc-row"><label>C:</label><input type="number" id="cu-c" value="-3" oninput="calcFromGeneral()"/></div>
+      <div class="calc-result" id="calc-general-result"></div>
+    </div>
+    <div class="calc-card">
+      <h3>📏 Garis Singgung</h3>
+      <div class="calc-row"><label>R (besar):</label><input type="number" id="gs-R" value="5" oninput="calcGS()"/></div>
+      <div class="calc-row"><label>r (kecil):</label><input type="number" id="gs-r" value="3" oninput="calcGS()"/></div>
+      <div class="calc-row"><label>JP:</label><input type="number" id="gs-jp" value="10" oninput="calcGS()"/></div>
+      <div class="calc-result" id="calc-gs-result"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VISUALISASI ===== -->
+<section id="visualisasi" class="section">
+  <div class="section-header">
+    <h2 class="section-title">🌀 Visualisasi Interaktif</h2>
+    <p class="section-desc">Geser slider — grafik berubah real-time!</p>
+  </div>
+  <div class="visual-tabs">
+    <button class="vtab-btn active" onclick="showVisual('v1',this)">Persamaan Lingkaran</button>
+    <button class="vtab-btn" onclick="showVisual('v2',this)">Posisi Titik</button>
+    <button class="vtab-btn" onclick="showVisual('v3',this)">Dua Lingkaran</button>
+    <button class="vtab-btn" onclick="showVisual('v4',this)">Garis Singgung</button>
+  </div>
+  <div id="v1" class="visual-content active">
+    <div class="visual-layout">
+      <div class="visual-controls">
+        <h3>⚙️ Atur Parameter</h3>
+        <label>Pusat X (a): <span id="val-a">0</span></label>
+        <input type="range" id="ctrl-a" min="-7" max="7" value="0" oninput="updateCircle1()">
+        <label>Pusat Y (b): <span id="val-b">0</span></label>
+        <input type="range" id="ctrl-b" min="-7" max="7" value="0" oninput="updateCircle1()">
+        <label>Jari-jari (r): <span id="val-r">3</span></label>
+        <input type="range" id="ctrl-r" min="1" max="8" value="3" oninput="updateCircle1()">
+        <div class="formula-display" id="formula-display">x² + y² = 9</div>
+        <div class="formula-display secondary" id="formula-general"></div>
+      </div>
+      <canvas id="circleCanvas" width="420" height="420"></canvas>
+    </div>
+  </div>
+  <div id="v2" class="visual-content">
+    <div class="visual-layout">
+      <div class="visual-controls">
+        <h3>📍 Cek Posisi Titik</h3>
+        <label>Titik X: <span id="val-px">2</span></label>
+        <input type="range" id="ctrl-px" min="-10" max="10" value="2" oninput="updatePointPos()">
+        <label>Titik Y: <span id="val-py">3</span></label>
+        <input type="range" id="ctrl-py" min="-10" max="10" value="3" oninput="updatePointPos()">
+        <label>Jari-jari: <span id="val-pr">5</span></label>
+        <input type="range" id="ctrl-pr" min="1" max="9" value="5" oninput="updatePointPos()">
+        <div class="position-result" id="position-result">—</div>
+        <div class="calc-result" id="pos-calc-detail" style="margin-top:.5rem;font-size:.8rem"></div>
+      </div>
+      <canvas id="pointCanvas" width="420" height="420"></canvas>
+    </div>
+  </div>
+  <div id="v3" class="visual-content">
+    <div class="visual-layout">
+      <div class="visual-controls">
+        <h3>🔗 Hubungan Dua Lingkaran</h3>
+        <label>Jari-jari L1 (R): <span id="val-R">4</span></label>
+        <input type="range" id="ctrl-R" min="1" max="7" value="4" oninput="updateTwoCircles()">
+        <label>Jari-jari L2 (r): <span id="val-r2">2</span></label>
+        <input type="range" id="ctrl-r2" min="1" max="7" value="2" oninput="updateTwoCircles()">
+        <label>Jarak Pusat (JP): <span id="val-jp">7</span></label>
+        <input type="range" id="ctrl-jp" min="0" max="15" value="7" oninput="updateTwoCircles()">
+        <div class="relation-result" id="relation-result">—</div>
+      </div>
+      <canvas id="twoCircleCanvas" width="420" height="420"></canvas>
+    </div>
+  </div>
+  <div id="v4" class="visual-content">
+    <div class="visual-layout">
+      <div class="visual-controls">
+        <h3>📐 Garis Singgung dari Titik Luar</h3>
+        <label>Titik X: <span id="val-tx">8</span></label>
+        <input type="range" id="ctrl-tx" min="-10" max="10" value="8" oninput="updateTangentVis()">
+        <label>Titik Y: <span id="val-ty">0</span></label>
+        <input type="range" id="ctrl-ty" min="-10" max="10" value="0" oninput="updateTangentVis()">
+        <label>Jari-jari: <span id="val-tr">4</span></label>
+        <input type="range" id="ctrl-tr" min="1" max="8" value="4" oninput="updateTangentVis()">
+        <div class="formula-display" id="tangent-result">—</div>
+      </div>
+      <canvas id="tangentCanvas" width="420" height="420"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SOAL & JAWAB ===== -->
+<section id="soal" class="section">
+  <div class="section-header">
+    <h2 class="section-title">🎯 Soal &amp; Jawab</h2>
+    <p class="section-desc">20 soal lengkap dengan pembahasan step-by-step</p>
+  </div>
+
+  <!-- FORM TAMBAH SOAL BARU -->
+  <div style="background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.2); border-radius:16px; padding:1.8rem; margin-bottom:2rem">
+    <h3 style="font-family:'Orbitron',sans-serif; color:#00d4ff; margin-bottom:1.2rem; font-size:1.1rem">➕ Tambah Soal Baru</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem">
+      <div>
+        <label style="color:#94a3b8; font-size:0.85rem; display:block; margin-bottom:0.4rem">Kategori</label>
+        <select id="inputKategori" style="width:100%; padding:0.7rem; background:#050a18; border:1px solid rgba(0,212,255,0.3); color:#00d4ff; border-radius:8px; font-family:'Exo 2',sans-serif">
+          <option value="persamaan">Persamaan</option>
+          <option value="bentuk-umum">Bentuk Umum</option>
+          <option value="posisi">Posisi Titik</option>
+          <option value="singgung">Garis Singgung</option>
+          <option value="hubungan">Hubungan</option>
+        </select>
+      </div>
+      <div>
+        <label style="color:#94a3b8; font-size:0.85rem; display:block; margin-bottom:0.4rem">Tingkat Kesulitan</label>
+        <select id="inputLevel" style="width:100%; padding:0.7rem; background:#050a18; border:1px solid rgba(0,212,255,0.3); color:#00d4ff; border-radius:8px; font-family:'Exo 2',sans-serif">
+          <option value="easy">⭐ Mudah</option>
+          <option value="medium">⭐⭐ Sedang</option>
+          <option value="hard">⭐⭐⭐ Sulit</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-bottom:1rem">
+      <label style="color:#94a3b8; font-size:0.85rem; display:block; margin-bottom:0.4rem">Soal</label>
+      <textarea id="inputSoal" placeholder="Tulis soal di sini..." style="width:100%; padding:0.8rem; background:#050a18; border:1px solid rgba(0,212,255,0.3); color:#e2e8f0; border-radius:8px; font-family:'Exo 2',sans-serif; min-height:80px; resize:vertical"></textarea>
+    </div>
+    <div style="margin-bottom:1rem">
+      <label style="color:#94a3b8; font-size:0.85rem; display:block; margin-bottom:0.4rem">Jawaban (Pembahasan Lengkap)</label>
+      <textarea id="inputJawaban" placeholder="Tulis jawaban dan pembahasan di sini..." style="width:100%; padding:0.8rem; background:#050a18; border:1px solid rgba(0,212,255,0.3); color:#e2e8f0; border-radius:8px; font-family:'Exo 2',sans-serif; min-height:100px; resize:vertical"></textarea>
+    </div>
+    <button onclick="tambahSoalBaru()" style="width:100%; padding:0.8rem; background:linear-gradient(135deg,#00d4ff,#7c3aed); border:none; color:#fff; border-radius:8px; font-weight:700; cursor:pointer; transition:all 0.3s; font-size:0.9rem">✅ Simpan Soal Baru</button>
+  </div>
+
+  <div class="soal-filter">
+    <button class="filter-btn active" onclick="filterSoal('all',this)">Semua</button>
+    <button class="filter-btn" onclick="filterSoal('persamaan',this)">Persamaan</button>
+    <button class="filter-btn" onclick="filterSoal('bentuk-umum',this)">Bentuk Umum</button>
+    <button class="filter-btn" onclick="filterSoal('posisi',this)">Posisi</button>
+    <button class="filter-btn" onclick="filterSoal('singgung',this)">Garis Singgung</button>
+    <button class="filter-btn" onclick="filterSoal('hubungan',this)">Hubungan</button>
+  </div>
+  <div class="soal-list" id="soal-list">
+    <!-- Soal 1-20 dirender oleh JS -->
+  </div>
+</section>
+
+<!-- ===== GAME ===== -->
+<section id="game" class="section">
+  <div class="section-header">
+    <h2 class="section-title">🎮 Arena Game</h2>
+    <p class="section-desc">5 game seru — kumpulkan XP sebanyak mungkin!</p>
+  </div>
+  <div class="game-tabs">
+    <button class="gtab-btn active" onclick="showGame('g1',this)">🧠 Kuis + Combo</button>
+    <button class="gtab-btn" onclick="showGame('g2',this)">🎯 Tebak Posisi</button>
+    <button class="gtab-btn" onclick="showGame('g3',this)">⏱️ Speed Math</button>
+    <button class="gtab-btn" onclick="showGame('g4',this)">🚀 Circle Shooter</button>
+    <button class="gtab-btn" onclick="showGame('g5',this)">🧩 Drag &amp; Match</button>
+  </div>
+
+  <!-- G1: Kuis + Combo -->
+  <div id="g1" class="game-content active">
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div class="quiz-score">⭐ <span id="q1-score">0</span></div>
+        <div class="combo-display" id="combo-display" style="display:none">🔥 COMBO x<span id="combo-count">1</span></div>
+        <div class="quiz-progress">Soal <span id="q1-current">1</span>/<span id="q1-total">12</span></div>
+        <div class="quiz-lives">❤️ <span id="q1-lives">3</span></div>
+      </div>
+      <div class="quiz-progress-bar"><div id="quiz-prog-fill"></div></div>
+      <div class="quiz-body" id="quiz-body">
+        <div class="quiz-question" id="q1-question">Tekan Mulai untuk bermain!</div>
+        <div class="quiz-options" id="q1-options"></div>
+      </div>
+      <div class="quiz-result hidden" id="q1-result">
+        <div class="result-icon" id="result-icon">🎉</div>
+        <h3 id="result-title">Selesai!</h3>
+        <p id="result-msg"></p>
+        <div class="result-xp" id="result-xp"></div>
+        <button class="btn-primary" onclick="startQuiz()">Main Lagi 🔄</button>
+      </div>
+      <button class="btn-primary" id="start-quiz-btn" onclick="startQuiz()">Mulai Kuis 🚀</button>
+    </div>
+  </div>
+
+  <!-- G2: Tebak Posisi -->
+  <div id="g2" class="game-content">
+    <div class="guess-container">
+      <div class="guess-header">
+        <div class="quiz-score">⭐ <span id="g2-score">0</span></div>
+        <div class="quiz-progress">Ronde <span id="g2-round">1</span>/8</div>
+        <div class="quiz-lives">⏱️ <span id="g2-timer">10</span>s</div>
+      </div>
+      <p class="guess-instruction" id="g2-instruction">Klik <strong>Mulai</strong> — tebak posisi titik merah!</p>
+      <canvas id="guessCanvas" width="380" height="380"></canvas>
+      <div class="guess-buttons" id="guess-buttons" style="display:none">
+        <button class="guess-btn green" onclick="submitGuess('dalam')">🟢 Di Dalam</button>
+        <button class="guess-btn blue" onclick="submitGuess('pada')">🔵 Pada Lingkaran</button>
+        <button class="guess-btn red" onclick="submitGuess('luar')">🔴 Di Luar</button>
+      </div>
+      <div class="guess-feedback" id="guess-feedback"></div>
+      <button class="btn-primary" id="g2-start-btn" onclick="startGuessGame()">Mulai Game 🎯</button>
+    </div>
+  </div>
+
+  <!-- G3: Speed Math -->
+  <div id="g3" class="game-content">
+    <div class="race-container">
+      <div class="race-header">
+        <div class="quiz-score">⭐ <span id="g3-score">0</span></div>
+        <div class="race-timer-wrap">
+          <div class="race-timer-bar"><div id="race-timer-fill"></div></div>
+          <span id="g3-timer">45</span>s
+        </div>
+        <div class="quiz-lives">✅ <span id="g3-correct">0</span></div>
+      </div>
+      <div class="race-question" id="g3-question">Tekan Mulai untuk bermain!</div>
+      <div class="race-input-row">
+        <input type="number" id="g3-input" class="race-input" placeholder="Jawaban..." onkeydown="if(event.key==='Enter')checkRace()"/>
+        <button class="btn-primary" onclick="checkRace()">✓</button>
+      </div>
+      <div class="race-feedback" id="g3-feedback"></div>
+      <button class="btn-primary" id="g3-start-btn" onclick="startRace()">Mulai Speed Math ⚡</button>
+    </div>
+  </div>
+
+  <!-- G4: Circle Shooter -->
+  <div id="g4" class="game-content">
+    <div class="shooter-container">
+      <div class="shooter-header">
+        <div class="quiz-score">⭐ <span id="g4-score">0</span></div>
+        <div class="quiz-lives">❤️ <span id="g4-lives">3</span></div>
+        <div class="quiz-progress">Level <span id="g4-level">1</span></div>
+      </div>
+      <div class="shooter-question" id="g4-question">Tekan Mulai!</div>
+      <div class="shooter-canvas-wrap">
+        <canvas id="shooterCanvas" width="600" height="340"></canvas>
+      </div>
+      <div class="shooter-controls">
+        <button class="btn-secondary" id="g4-start-btn" onclick="startShooter()">Mulai Shooter 🚀</button>
+        <p style="color:#666;font-size:.8rem;margin-top:.5rem">Klik lingkaran yang berisi jawaban benar!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- G5: Drag & Match -->
+  <div id="g5" class="game-content">
+    <div class="drag-container">
+      <div class="drag-header">
+        <div class="quiz-score">⭐ <span id="g5-score">0</span></div>
+        <div class="quiz-progress">Pasangan <span id="g5-round">1</span>/6</div>
+      </div>
+      <p class="guess-instruction">Pasangkan persamaan lingkaran dengan pusat &amp; jari-jarinya yang benar!</p>
+      <div class="drag-layout" id="drag-layout"></div>
+      <div class="drag-feedback" id="drag-feedback"></div>
+      <button class="btn-primary" id="g5-start-btn" onclick="startDragGame()">Mulai Matching 🧩</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LEADERBOARD ===== -->
+<section id="leaderboard" class="section">
+  <div class="section-header">
+    <h2 class="section-title">🏆 Leaderboard</h2>
+    <p class="section-desc">Top 5 skor terbaik semua game — tersimpan di browser kamu</p>
+  </div>
+  <div class="lb-layout">
+    <div class="lb-card">
+      <h3>🧠 Kuis + Combo</h3>
+      <div id="lb-quiz" class="lb-list"></div>
+    </div>
+    <div class="lb-card">
+      <h3>🎯 Tebak Posisi</h3>
+      <div id="lb-guess" class="lb-list"></div>
+    </div>
+    <div class="lb-card">
+      <h3>⚡ Speed Math</h3>
+      <div id="lb-race" class="lb-list"></div>
+    </div>
+    <div class="lb-card">
+      <h3>🚀 Circle Shooter</h3>
+      <div id="lb-shooter" class="lb-list"></div>
+    </div>
+    <div class="lb-card">
+      <h3>🧩 Drag &amp; Match</h3>
+      <div id="lb-drag" class="lb-list"></div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:1.5rem">
+    <button class="btn-secondary" onclick="clearLeaderboard()">🗑️ Reset Leaderboard</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">🌀 Galaxy Math</div>
+  <p>Media Pembelajaran Matematika — Lingkaran</p>
+  <p class="footer-topics">Persamaan · Bentuk Umum · Posisi Titik &amp; Garis · Garis Singgung · Hubungan Dua Lingkaran</p>
+  <button class="footer-kunci-btn" onclick="openKunciModal()">🔑 Kunci Jawaban (Guru)</button>
+</footer>
+
+<!-- ===== MODAL: ISI NAMA & PRESENSI ===== -->
+<div class="modal-overlay" id="modalPresensi">
+  <div class="modal-box">
+    <div class="modal-icon">📝</div>
+    <h2 class="modal-title">Daftar Hadir Kuis</h2>
+    <p class="modal-sub">Isi data dirimu sebelum mulai kuis!</p>
+    <div class="modal-form">
+      <div class="modal-field">
+        <label>👤 Nama Lengkap</label>
+        <input type="text" id="input-nama" placeholder="Masukkan nama lengkap..." maxlength="40" autocomplete="off"/>
+      </div>
+      <div class="modal-field">
+        <label>🔢 Nomor Presensi</label>
+        <input type="number" id="input-presensi" placeholder="Contoh: 15" min="1" max="40"/>
+      </div>
+    </div>
+    <div class="modal-error" id="modal-error"></div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="submitPresensi()">Mulai Kuis 🚀</button>
+      <button class="btn-secondary" onclick="closeModal('modalPresensi')">Batal</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: PASSWORD KUNCI JAWABAN ===== -->
+<div class="modal-overlay" id="modalPassword">
+  <div class="modal-box">
+    <div class="modal-icon">🔐</div>
+    <h2 class="modal-title">Akses Kunci Jawaban</h2>
+    <p class="modal-sub">Masukkan password untuk melanjutkan</p>
+    <div class="modal-form">
+      <div class="modal-field">
+        <label>🔑 Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="input-password" placeholder="Masukkan password..." maxlength="20"
+            onkeydown="if(event.key==='Enter')checkPassword()"/>
+          <button class="pw-toggle" onclick="togglePwVis()" title="Tampilkan">👁</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-error" id="pw-error"></div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="checkPassword()">Masuk 🔓</button>
+      <button class="btn-secondary" onclick="closeModal('modalPassword')">Batal</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: RANKING KUIS ===== -->
+<div class="modal-overlay" id="modalRanking">
+  <div class="modal-box modal-box-wide">
+    <div class="modal-icon" id="rank-icon">🏆</div>
+    <h2 class="modal-title" id="rank-title">Hasil Kuis</h2>
+    <div class="rank-player-card" id="rank-player-card"></div>
+    <div class="rank-table-wrap">
+      <h3 class="rank-table-title">🏅 Papan Peringkat Kelas</h3>
+      <div id="rank-table"></div>
+    </div>
+    <div class="modal-actions" style="margin-top:1.5rem">
+      <button class="btn-primary" onclick="closeModal('modalRanking');startQuiz()">Main Lagi 🔄</button>
+      <button class="btn-secondary" onclick="closeModal('modalRanking')">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="level-up-popup" id="levelUpPopup"></div>
+
+<!-- ===== PANEL KUNCI JAWABAN (EMBEDDED) ===== -->
+<div id="panel-kunci" class="kunci-panel">
+  <div class="kunci-panel-inner">
+    <div class="kunci-topbar">
+      <div class="kunci-topbar-left">
+        <span class="kunci-logo">🔑 Kunci Jawaban</span>
+        <span class="kunci-badge">🔒 DOKUMEN GURU</span>
+      </div>
+      <div class="kunci-topbar-right">
+        <button class="kunci-print-btn" onclick="window.print()">🖨️ Cetak PDF</button>
+        <button class="kunci-close-btn" onclick="closeKunci()">✕ Tutup</button>
+      </div>
+    </div>
+
+    <div class="kunci-body">
+      <div class="kunci-header-info">
+        <h2>Galaxy Math — Kunci Jawaban Lengkap</h2>
+        <p>⚠️ Dokumen ini hanya untuk guru — jangan ditampilkan ke siswa</p>
+      </div>
+
+      <div class="kj-tabs">
+        <button class="kj-tab active" onclick="showKJ('soal',this)">📝 Soal Latihan (20 Soal)</button>
+        <button class="kj-tab" onclick="showKJ('kuis',this)">🧠 Kunci Kuis Game</button>
+        <button class="kj-tab" onclick="showKJ('ringkasan',this)">📋 Ringkasan</button>
+      </div>
+
+      <!-- SOAL LATIHAN -->
+      <div id="kj-soal" class="kj-section active">
+        <p class="kj-section-title">📝 Kunci Jawaban — Soal Latihan</p>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">01</span><span class="kj-cat">Persamaan</span><span class="kj-level easy">⭐ Mudah</span></div><div class="kj-q">Tentukan persamaan lingkaran berpusat di O(0,0) dan berjari-jari 3.</div><div class="kj-ans"><strong>Diketahui:</strong> Pusat O(0,0), r = 3<br><strong>Rumus:</strong> x² + y² = r²<br><strong>Substitusi:</strong> x² + y² = 3² = 9<br><span class="final">Jawab: x² + y² = 9</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">02</span><span class="kj-cat">Persamaan</span><span class="kj-level easy">⭐ Mudah</span></div><div class="kj-q">Tentukan persamaan lingkaran berpusat di O(0,0) dan melalui titik P(5, 12).</div><div class="kj-ans"><strong>Hitung r:</strong> r = √(5²+12²) = √169 = 13<br><strong>Persamaan:</strong> x² + y² = 169<br><span class="final">Jawab: x² + y² = 169</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">03</span><span class="kj-cat">Persamaan</span><span class="kj-level medium">⭐⭐ Sedang</span></div><div class="kj-q">Tentukan persamaan lingkaran dengan pusat P(1, 2) dan jari-jari r = 8.</div><div class="kj-ans"><strong>Rumus:</strong> (x−a)²+(y−b)²=r²<br><strong>Substitusi:</strong> (x−1)²+(y−2)²=64<br><span class="final">Jawab: (x−1)² + (y−2)² = 64</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">04</span><span class="kj-cat">Persamaan</span><span class="kj-level medium">⭐⭐ Sedang</span></div><div class="kj-q">Tentukan persamaan lingkaran pusat P(3, 2) yang melalui titik A(10, 2).</div><div class="kj-ans"><strong>r:</strong> √((10−3)²+(2−2)²) = √49 = 7<br><span class="final">Jawab: (x−3)² + (y−2)² = 49</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">05</span><span class="kj-cat">Persamaan</span><span class="kj-level medium">⭐⭐ Sedang</span></div><div class="kj-q">Tentukan persamaan lingkaran pusat P(2, −9) yang menyinggung sumbu X.</div><div class="kj-ans"><strong>Menyinggung sumbu X:</strong> r = |b| = |−9| = 9<br><span class="final">Jawab: (x−2)² + (y+9)² = 81</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">06</span><span class="kj-cat">Bentuk Umum</span><span class="kj-level medium">⭐⭐ Sedang</span></div><div class="kj-q">Tentukan pusat dan jari-jari dari x² + y² + 4x − 2y + 1 = 0.</div><div class="kj-ans"><strong>A=4, B=−2, C=1</strong><br>Pusat = (−2, 1)<br>r = √(4+1−1) = √4 = 2<br><span class="final">Jawab: Pusat (−2, 1), r = 2</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">07</span><span class="kj-cat">Bentuk Umum</span><span class="kj-level medium">⭐⭐ Sedang</span></div><div class="kj-q">Tentukan pusat dan jari-jari dari x² + y² − 6x + 8y − 24 = 0.</div><div class="kj-ans"><strong>A=−6, B=8, C=−24</strong><br>Pusat = (3, −4)<br>r = √(9+16+24) = √49 = 7<br><span class="final">Jawab: Pusat (3, −4), r = 7</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">08</span><span class="kj-cat">Bentuk Umum</span><span class="kj-level hard">⭐⭐⭐ Sulit</span></div><div class="kj-q">Tentukan jari-jari dari lingkaran yang berpusat di (3, −2) dan melalui titik (7, 1).</div><div class="kj-ans">r = √((7−3)²+(1+2)²) = √(16+9) = √25 = 5<br><span class="final">Jawab: r = 5</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">09</span><span class="kj-cat">Posisi Titik</span><span class="kj-level easy">⭐ Mudah</span></div><div class="kj-q">Tentukan posisi titik A(2, 7) pada lingkaran dengan pusat O(0,0) dan jari-jari 8.</div><div class="kj-ans">2²+7² = 4+49 = 53 &lt; 64 = r²<br><span class="final">Jawab: Titik A DI DALAM lingkaran</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">10</span><span class="kj-cat">Posisi Titik</span><span class="kj-level medium">⭐⭐ Sedang</span></div><div class="kj-q">Tentukan posisi titik B(5, 3) pada lingkaran yang berpusat di P(3, 2) dan jari-jari 5.</div><div class="kj-ans">(5−3)²+(3−2)² = 4+1 = 5 &lt; 25 = r²<br><span class="final">Jawab: Titik B DI DALAM lingkaran</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">11</span><span class="kj-cat">Posisi Titik</span><span class="kj-level hard">⭐⭐⭐ Sulit</span></div><div class="kj-q">Tentukan posisi titik C(8, 1) pada lingkaran x² + y² + 4x − 8y − 5 = 0.</div><div class="kj-ans">8²+1²+4(8)−8(1)−5 = 64+1+32−8−5 = 84 &gt; 0<br><span class="final">Jawab: Titik C DI LUAR lingkaran</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">12</span><span class="kj-cat">Posisi Garis</span><span class="kj-level hard">⭐⭐⭐ Sulit</span></div><div class="kj-q">Tentukan posisi garis y = 3x + 2 pada lingkaran x² + y² + 4x − y + 1 = 0.</div><div class="kj-ans">Substitusi → 10x²+13x+3=0<br>D = 13²−4(10)(3) = 169−120 = 49 &gt; 0<br><span class="final">Jawab: Garis MEMOTONG di dua titik</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">13</span><span class="kj-cat">Garis Singgung</span><span class="kj-level medium">⭐⭐ Sedang</span></div><div class="kj-q">R=6, r=2, JP=10. Tentukan GSPL!</div><div class="kj-ans">GSPL = √(100−16) = √84 = 2√21<br><span class="final">Jawab: 2√21 ≈ 9,165</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">14</span><span class="kj-cat">Garis Singgung</span><span class="kj-level medium">⭐⭐ Sedang</span></div><div class="kj-q">R=6, r=2, JP=10. Tentukan GSPD!</div><div class="kj-ans">GSPD = √(100−64) = √36 = 6<br><span class="final">Jawab: GSPD = 6</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">15</span><span class="kj-cat">Garis Singgung</span><span class="kj-level hard">⭐⭐⭐ Sulit</span></div><div class="kj-q">Tentukan panjang garis singgung dari titik P(6, 0) ke lingkaran x² + y² = 16.</div><div class="kj-ans">JP=6, r=4 → d = √(36−16) = √20 = 2√5<br><span class="final">Jawab: 2√5 ≈ 4,472</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">16</span><span class="kj-cat">Hubungan</span><span class="kj-level easy">⭐ Mudah</span></div><div class="kj-q">L1 pusat(0,0) r=3, L2 pusat(7,0) r=2. Tentukan hubungannya!</div><div class="kj-ans">JP=7, R+r=5 → JP &gt; R+r<br><span class="final">Jawab: SALING LEPAS</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">17</span><span class="kj-cat">Hubungan</span><span class="kj-level medium">⭐⭐ Sedang</span></div><div class="kj-q">L1 pusat(0,0) r=4, L2 pusat(6,0) r=2. Tentukan hubungannya!</div><div class="kj-ans">JP=6, R+r=6 → JP = R+r<br><span class="final">Jawab: BERSINGGUNGAN DI LUAR</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">18</span><span class="kj-cat">Hubungan</span><span class="kj-level medium">⭐⭐ Sedang</span></div><div class="kj-q">L1 pusat(0,0) r=5, L2 pusat(3,0) r=1. Tentukan hubungannya!</div><div class="kj-ans">JP=3, |R−r|=4 → JP &lt; |R−r|<br><span class="final">Jawab: L2 DI DALAM L1</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">19</span><span class="kj-cat">Hubungan</span><span class="kj-level hard">⭐⭐⭐ Sulit</span></div><div class="kj-q">L1 pusat(0,0) r=5, L2 pusat(4,0) r=2. Tentukan hubungannya!</div><div class="kj-ans">JP=4, R+r=7, |R−r|=3 → |R−r| &lt; JP &lt; R+r<br><span class="final">Jawab: BERPOTONGAN DI DUA TITIK</span></div></div>
+        <div class="kj-card"><div class="kj-card-header"><span class="kj-num">20</span><span class="kj-cat">Bentuk Umum</span><span class="kj-level hard">⭐⭐⭐ Sulit</span></div><div class="kj-q">Ubah x²+y²−4x+6y−3=0 ke bentuk standar.</div><div class="kj-ans">(x²−4x+4)+(y²+6y+9)=3+4+9<br>(x−2)²+(y+3)²=16<br><span class="final">Jawab: Pusat (2,−3), r = 4</span></div></div>
+      </div>
+
+      <!-- KUNCI KUIS -->
+      <div id="kj-kuis" class="kj-section">
+        <p class="kj-section-title">🧠 Kunci Kuis Game (12 Soal)</p>
+        <div class="quiz-kunci-grid">
+          <div class="qk-card"><div class="qk-num">SOAL 1</div><div class="qk-q">Persamaan lingkaran pusat O(0,0) jari-jari 5?</div><div class="qk-opts"><div class="qk-opt">A. x²+y²=5</div><div class="qk-opt correct">B. x²+y²=25 ✓</div><div class="qk-opt">C. x²+y²=10</div><div class="qk-opt">D. (x+5)²+y²=25</div></div><div class="qk-why">r²=5²=25</div></div>
+          <div class="qk-card"><div class="qk-num">SOAL 2</div><div class="qk-q">Pusat (x−3)²+(y+2)²=16?</div><div class="qk-opts"><div class="qk-opt">A. (3,2)</div><div class="qk-opt">B. (−3,2)</div><div class="qk-opt correct">C. (3,−2) ✓</div><div class="qk-opt">D. (−3,−2)</div></div><div class="qk-why">a=3, b=−2</div></div>
+          <div class="qk-card"><div class="qk-num">SOAL 3</div><div class="qk-q">Jari-jari x²+y²=49?</div><div class="qk-opts"><div class="qk-opt">A. 49</div><div class="qk-opt correct">B. 7 ✓</div><div class="qk-opt">C. √7</div><div class="qk-opt">D. 14</div></div><div class="qk-why">r=√49=7</div></div>
+          <div class="qk-card"><div class="qk-num">SOAL 4</div><div class="qk-q">Posisi A(3,4) pada x²+y²=25?</div><div class="qk-opts"><div class="qk-opt">A. Di dalam</div><div class="qk-opt correct">B. Pada lingkaran ✓</div><div class="qk-opt">C. Di luar</div><div class="qk-opt">D. Tidak tentu</div></div><div class="qk-why">3²+4²=25=r²</div></div>
+          <div class="qk-card"><div class="qk-num">SOAL 5</div><div class="qk-q">Bentuk umum persamaan lingkaran?</div><div class="qk-opts"><div class="qk-opt">A. x²+y²=r²</div><div class="qk-opt">B. (x−a)²+(y−b)²=r²</div><div class="qk-opt correct">C. x²+y²+Ax+By+C=0 ✓</div><div class="qk-opt">D. ax²+by²=r</div></div><div class="qk-why">Bentuk umum lingkaran</div></div>
+          <div class="qk-card"><div class="qk-num">SOAL 6</div><div class="qk-q">Pusat x²+y²+4x−6y+4=0?</div><div class="qk-opts"><div class="qk-opt">A. (4,−6)</div><div class="qk-opt correct">B. (−2,3) ✓</div><div class="qk-opt">C. (2,−3)</div><div class="qk-opt">D. (−4,6)</div></div><div class="qk-why">A=4,B=−6 → (−2,3)</div></div>
+          <div class="qk-card"><div class="qk-num">SOAL 7</div><div class="qk-q">D&gt;0 artinya garis...?</div><div class="qk-opts"><div class="qk-opt">A. Menyinggung</div><div class="qk-opt">B. Tidak memotong</div><div class="qk-opt correct">C. Memotong 2 titik ✓</div><div class="qk-opt">D. Sejajar</div></div><div class="qk-why">D&gt;0 → 2 akar berbeda</div></div>
+          <div class="qk-card"><div class="qk-num">SOAL 8</div><div class="qk-q">Kosentris artinya...?</div><div class="qk-opts"><div class="qk-opt">A. Jari-jari sama</div><div class="qk-opt correct">B. Pusatnya sama ✓</div><div class="qk-opt">C. Berpotongan</div><div class="qk-opt">D. Saling lepas</div></div><div class="qk-why">Kosentris = sepusat</div></div>
+          <div class="qk-card"><div class="qk-num">SOAL 9</div><div class="qk-q">Rumus GSPL?</div><div class="qk-opts"><div class="qk-opt">A. √(JP²+(R−r)²)</div><div class="qk-opt">B. √(JP²−(R+r)²)</div><div class="qk-opt correct">C. √(JP²−(R−r)²) ✓</div><div class="qk-opt">D. √(JP²+(R+r)²)</div></div><div class="qk-why">GSPL pakai (R−r)</div></div>
+          <div class="qk-card"><div class="qk-num">SOAL 10</div><div class="qk-q">Lingkaran pusat P(1,2) r=3?</div><div class="qk-opts"><div class="qk-opt">A. (x+1)²+(y+2)²=9</div><div class="qk-opt correct">B. (x−1)²+(y−2)²=9 ✓</div><div class="qk-opt">C. (x−1)²+(y−2)²=3</div><div class="qk-opt">D. x²+y²=9</div></div><div class="qk-why">(x−1)²+(y−2)²=9</div></div>
+          <div class="qk-card"><div class="qk-num">SOAL 11</div><div class="qk-q">Jari-jari x²+y²−6x+8y−24=0?</div><div class="qk-opts"><div class="qk-opt">A. 5</div><div class="qk-opt">B. 6</div><div class="qk-opt correct">C. 7 ✓</div><div class="qk-opt">D. 8</div></div><div class="qk-why">r=√(9+16+24)=7</div></div>
+          <div class="qk-card"><div class="qk-num">SOAL 12</div><div class="qk-q">Posisi B(5,3) pada lingkaran P(3,2) r=5?</div><div class="qk-opts"><div class="qk-opt">A. Di luar</div><div class="qk-opt">B. Pada lingkaran</div><div class="qk-opt correct">C. Di dalam ✓</div><div class="qk-opt">D. Tidak tentu</div></div><div class="qk-why">5 &lt; 25=r²</div></div>
+        </div>
+      </div>
+
+      <!-- RINGKASAN -->
+      <div id="kj-ringkasan" class="kj-section">
+        <p class="kj-section-title">📋 Ringkasan Jawaban Cepat</p>
+        <table class="summary-table">
+          <thead><tr><th>No</th><th>Soal</th><th>Jawaban</th><th>Kategori</th></tr></thead>
+          <tbody>
+            <tr><td>01</td><td>Pusat O(0,0), r=3</td><td><span class="ans-badge">x²+y²=9</span></td><td>Persamaan</td></tr>
+            <tr><td>02</td><td>Pusat O(0,0), melalui P(5,12)</td><td><span class="ans-badge">x²+y²=169</span></td><td>Persamaan</td></tr>
+            <tr><td>03</td><td>Pusat P(1,2), r=8</td><td><span class="ans-badge">(x−1)²+(y−2)²=64</span></td><td>Persamaan</td></tr>
+            <tr><td>04</td><td>Pusat P(3,2), melalui A(10,2)</td><td><span class="ans-badge">(x−3)²+(y−2)²=49</span></td><td>Persamaan</td></tr>
+            <tr><td>05</td><td>Pusat P(2,−9), singgung sumbu X</td><td><span class="ans-badge">(x−2)²+(y+9)²=81</span></td><td>Persamaan</td></tr>
+            <tr><td>06</td><td>x²+y²+4x−2y+1=0</td><td><span class="ans-badge">Pusat(−2,1), r=2</span></td><td>Bentuk Umum</td></tr>
+            <tr><td>07</td><td>x²+y²−6x+8y−24=0</td><td><span class="ans-badge">Pusat(3,−4), r=7</span></td><td>Bentuk Umum</td></tr>
+            <tr><td>08</td><td>Pusat(3,−2), melalui (7,1)</td><td><span class="ans-badge">r=5</span></td><td>Bentuk Umum</td></tr>
+            <tr><td>09</td><td>Titik A(2,7), r=8</td><td><span class="ans-badge">Di dalam</span></td><td>Posisi Titik</td></tr>
+            <tr><td>10</td><td>Titik B(5,3), pusat P(3,2) r=5</td><td><span class="ans-badge">Di dalam</span></td><td>Posisi Titik</td></tr>
+            <tr><td>11</td><td>Titik C(8,1), x²+y²+4x−8y−5=0</td><td><span class="ans-badge">Di luar</span></td><td>Posisi Titik</td></tr>
+            <tr><td>12</td><td>Garis y=3x+2 pada lingkaran</td><td><span class="ans-badge">Memotong (D=49)</span></td><td>Posisi Garis</td></tr>
+            <tr><td>13</td><td>R=6, r=2, JP=10 → GSPL</td><td><span class="ans-badge">2√21 ≈ 9,165</span></td><td>Garis Singgung</td></tr>
+            <tr><td>14</td><td>R=6, r=2, JP=10 → GSPD</td><td><span class="ans-badge">6</span></td><td>Garis Singgung</td></tr>
+            <tr><td>15</td><td>Titik P(6,0), x²+y²=16</td><td><span class="ans-badge">2√5 ≈ 4,472</span></td><td>Garis Singgung</td></tr>
+            <tr><td>16</td><td>L1 r=3, L2 r=2, JP=7</td><td><span class="ans-badge">Saling lepas</span></td><td>Hubungan</td></tr>
+            <tr><td>17</td><td>L1 r=4, L2 r=2, JP=6</td><td><span class="ans-badge">Bersinggungan luar</span></td><td>Hubungan</td></tr>
+            <tr><td>18</td><td>L1 r=5, L2 r=1, JP=3</td><td><span class="ans-badge">L2 di dalam L1</span></td><td>Hubungan</td></tr>
+            <tr><td>19</td><td>L1 r=5, L2 r=2, JP=4</td><td><span class="ans-badge">Berpotongan 2 titik</span></td><td>Hubungan</td></tr>
+            <tr><td>20</td><td>x²+y²−4x+6y−3=0</td><td><span class="ans-badge">Pusat(2,−3), r=4</span></td><td>Bentuk Umum</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div><!-- end kunci-body -->
+  </div><!-- end kunci-panel-inner -->
+</div><!-- end panel-kunci -->
+
+<script src="script.js"></script>
+<script src="soal-extension.js"></script>
+</body>
+</html>
